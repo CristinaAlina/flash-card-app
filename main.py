@@ -27,8 +27,16 @@ def choose_language_settings(language):
     global flip_timer
 
     # Read data according to language
-    input_file = f"data/{language}_words.csv"
-    data = pandas.read_csv(input_file)
+    # If progress file exists, read from this file, else read from the original file according to language
+    input_file = ""
+    try:
+        with open(f"data/{language}_words_to_learn.csv"):
+            input_file = f"data/{language}_words_to_learn.csv"
+    except FileNotFoundError:
+        input_file = f"data/{language}_words.csv"
+    finally:
+        data = pandas.read_csv(input_file)
+
     list_translations = pandas.DataFrame(data).to_dict(orient="records")  # generate a list of dictionaries
 
     # Set the chosen pair of languages
@@ -57,10 +65,19 @@ def choose_language_settings(language):
 
 
 # -------------- CREATE FLASH CARDS -------------- #
-def generate_next_card():
+def generate_next_card(button_type):
     """Chooses another random card from list and update the widgets data from canvas"""
     global flip_timer, current_card
     window.after_cancel(flip_timer)
+
+    # If user presses right button, this known word will be removed from the list of cards and
+    # an updated file for learning will be generated
+    # This has in scope to be shown only the words that user doesn't know
+    if button_type == "right":
+        list_translations.remove(current_card)
+        data_to_learn = pandas.DataFrame(list_translations)
+        data_to_learn.to_csv(f"data/{foreign_language.lower()}_words_to_learn.csv", index=False)
+
     current_card = list_translations[randint(1, len(list_translations) - 1)]
     word = current_card[foreign_language]
 
@@ -118,7 +135,9 @@ spain_button.pack(padx=50, pady=37)
 canvas.grid(column=0, row=0, columnspan=2)
 
 # Buttons for second interface
-wrong_button = Button(image=cross_image, highlightthickness=0, border=0, command=generate_next_card)
-right_button = Button(image=check_image, highlightthickness=0, border=0, command=generate_next_card)
+wrong_button = Button(image=cross_image, highlightthickness=0, border=0,
+                      command=lambda button_type="wrong": generate_next_card(button_type))
+right_button = Button(image=check_image, highlightthickness=0, border=0,
+                      command=lambda button_type="right": generate_next_card(button_type))
 
 window.mainloop()

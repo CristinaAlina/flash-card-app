@@ -17,3 +17,9 @@ Test your memory by going through the flashcards!
 ![guess the translation](https://github.com/CristinaAlina/flash-card-app/assets/148490551/ff058278-cc29-48ec-9bbf-704244335c1f)
 ---
 ![3 seconds translation](https://github.com/CristinaAlina/flash-card-app/assets/148490551/896f3d04-6e29-4939-bfac-17f3ad817713)
+---
+### Data reference:
+#### https://vocab.chat/blog/most-common-romanian-words.html
+#### https://vocab.chat/blog/most-common-french-words.html
+#### https://1000mostcommonwords.com/1000-most-common-spanish-words/
+#### https://strommeninc.com/1000-most-common-german-words-frequency-vocabulary/
